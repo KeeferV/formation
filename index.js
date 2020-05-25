@@ -1,14 +1,15 @@
 let os = require('os')
 var fs = require('fs')
+var path = require('path')
 var readline = require('readline');
 var rl = readline.createInterface({input: process.stdin, output: process.stdout, terminal: false});
 
 console.log("Enter ID");
 
 rl.on('line', function (line) {
-  let bits = line.split("i want product ");
+  let bits = line.split("i want product");
   if (bits[1]) {
-    let id = bits[1];
+    let id = bits[1].trim();
     orderProductById(id);
   } else {
     process.exit();
@@ -16,47 +17,38 @@ rl.on('line', function (line) {
 })
 
 
-function getAllProducts() {
-  fs.readFile(`${__dirname}/products.json`, (err, data) => {
-    if (err) {
-      throw err;
-    }
+function getAllProducts(callback) {
+  fs.readFile(path.join(__dirname, "products.json"), "utf8", (err, contents) => {
+    if (err)
+      return callback(err)
     try {
-      var books = JSON.parse(data);
-    } catch (err) {
-      throw err;
+      var products = JSON.parse(contents).products;
+      //console.log("Bienvenue. Voici les produits disponibles")
+      //products.forEach(product => {
+      //  console.log(product.id, "-", product.name, "/", product.EUR_price / 100, "/", product.orders_counter)
+      //});
+      return callback(null, products)
+    } catch (error) {
+      return callback(error)
     }
-    books.forEach(book => {
-      console.log(`${book.id} - ${book.name} / ${book.EUR_price} / ${book.orders_counter}`);
-    })
-
   })
-
 }
 
 function orderProductById(id) {
-  fs.readFile(`${__dirname}/products.json`, (err, data) => {
-    if (err) {
-      throw err;
-    }
-    try {
-      var books = JSON.parse(data);
-    } catch (err) {
-      throw err;
-    }
-    books.forEach(book => {
-      if (book.id === id) {
-        book.orders_counter++;
-        data = JSON.stringify(books)
-        fs.writeFile(`${__dirname}/products.json`, data, "UTF8", (err, data) => {
-          if (err) {
-            throw err;
-          }
-          console.log(`Command terminée. Voici votre fichier:${book.file_link}`)
-          process.exit();
-        });
-        //break;
+  getAllProducts((err, products) => {
+    var link;
+    products.forEach(product => {
+      if (product.id == id) {
+        product.orders_counter++;
+        link = product.file_link;
       }
-    })
+    });
+    let new_products = {"products": products}
+    fs.writeFile(path.join(__dirname, "products.json"), JSON.stringify(new_products, null, 4), (err) => {
+      if (err)
+        throw err;
+      console.log('Commande terminée! Voici votre fichier', link);
+      process.exit();
+    });
   })
 }
