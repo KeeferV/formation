@@ -1,0 +1,11 @@
+{
+  "name": "bookshop",
+  "version": "1.0.0",
+  "description": "My book store",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Keith Vernon",
+  "license": "ISC"
+}

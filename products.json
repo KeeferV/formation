@@ -1,0 +1,22 @@
+[
+  {
+          "id": "A01",
+    "name": "Bill Bryson",
+          "description": "",
+          "USD_price": "1",
+          "EUR_price": 1,
+          "file_link": "",
+          "creation_date": "2020-01-01",
+          "orders_counter": 1
+  },
+  {
+    "id": "A02",
+    "name": "Ken Follett",
+    "description": "",
+    "USD_price": "2",
+    "EUR_price": 2,
+    "file_link": "",
+    "creation_date": "2020-01-02",
+    "orders_counter": 2
+  }
+]
