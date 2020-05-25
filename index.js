@@ -11,9 +11,9 @@ fs.readFile(`${__dirname}/products.json`, (err, data) => {
     throw err;
   }
   getAllProducts(books);
-  for (i in books) {
+  //for (i in books) {
     //console.log(books[i].name);
-  }
+  //}
 
 })
 
