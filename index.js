@@ -4,10 +4,15 @@ var readline = require('readline');
 var rl = readline.createInterface({input: process.stdin, output: process.stdout, terminal: false});
 
 console.log("Enter ID");
+
 rl.on('line', function (line) {
-  var id = line
-  orderProductById(id);
+  let bits = line.split("i want product ");
+  let id = bits[1];
+  if (id !== '') {
+    orderProductById(id);
+  }
 })
+
 
 function getAllProducts() {
   fs.readFile(`${__dirname}/products.json`, (err, data) => {
