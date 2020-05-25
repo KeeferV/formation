@@ -11,9 +11,6 @@ fs.readFile(`${__dirname}/products.json`, (err, data) => {
     throw err;
   }
   getAllProducts(books);
-  //for (i in books) {
-    //console.log(books[i].name);
-  //}
 
 })
 
@@ -22,7 +19,4 @@ function getAllProducts(books) {
   books.forEach(book => {
     console.log(`${book.id}/${book.name}/${book.EUR_price}/${book.orders_counter}`);
   })
-  //for (i in books) {
-  //  console.log(`${books[i].id}/${books[i].name}/${books[i].EUR_price}/${books[i].orders_counter}`);
-  //}
 }
