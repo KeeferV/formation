@@ -3,11 +3,10 @@ var fs = require('fs')
 var readline = require('readline');
 var rl = readline.createInterface({input: process.stdin, output: process.stdout, terminal: false});
 
-//getAllProducts();
+console.log("Enter ID");
 rl.on('line', function (line) {
   var id = line
   orderProductById(id);
-  return
 })
 
 function getAllProducts() {
@@ -47,6 +46,7 @@ function orderProductById(id) {
             throw err;
           }
           console.log(`Command terminée. Voici votre fichier:${book.file_link}`)
+          process.exit();
         });
         //break;
       }
