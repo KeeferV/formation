@@ -1,7 +1,14 @@
 let os = require('os')
 var fs = require('fs')
+var readline = require('readline');
+var rl = readline.createInterface({input: process.stdin, output: process.stdout, terminal: false});
 
-getAllProducts();
+//getAllProducts();
+rl.on('line', function (line) {
+  var id = line
+  orderProductById(id);
+  return
+})
 
 function getAllProducts() {
   fs.readFile(`${__dirname}/products.json`, (err, data) => {
@@ -20,7 +27,7 @@ function getAllProducts() {
   })
 
 }
-/*
+
 function orderProductById(id) {
   fs.readFile(`${__dirname}/products.json`, (err, data) => {
     if (err) {
@@ -32,12 +39,14 @@ function orderProductById(id) {
       throw err;
     }
     books.forEach(book => {
-      if (book.id == id) {
+      if (book.id === id) {
         book.orders_counter++;
-        data = JSON.toString(books)
-
+        data = JSON.stringify(books)
+        fs.writeFile(`${__dirname}/products.json`, data, "UTF8", (err, data) => {
+          console.log(`Command terminée. Voici votre fichier:${book.file_link}`)
+        });
+        //break;
       }
     })
-  }
+  })
 }
-*/
