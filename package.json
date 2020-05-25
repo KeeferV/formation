@@ -2,10 +2,16 @@
   "name": "bookshop",
   "version": "1.0.0",
   "description": "My book store",
-  "main": "index.js",
+  "main": "start.js",
   "scripts": {
-    "test": "test"
+    "start": "node index.js",
+    "test": "test",
+    "dev": "nodemon index.js"
   },
   "author": "Keith Vernon",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {},
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
