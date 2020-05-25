@@ -17,6 +17,6 @@ fs.readFile(`${__dirname}/products.json`, (err, data) => {
 
 function getAllProducts(books) {
   books.forEach(book => {
-    console.log(`${book.id}/${book.name}/${book.EUR_price}/${book.orders_counter}`);
+    console.log(`${book.id} - ${book.name} / ${book.EUR_price} / ${book.orders_counter}`);
   })
 }
