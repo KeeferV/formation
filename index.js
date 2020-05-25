@@ -43,6 +43,9 @@ function orderProductById(id) {
         book.orders_counter++;
         data = JSON.stringify(books)
         fs.writeFile(`${__dirname}/products.json`, data, "UTF8", (err, data) => {
+          if (err) {
+            throw err;
+          }
           console.log(`Command terminée. Voici votre fichier:${book.file_link}`)
         });
         //break;
