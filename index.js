@@ -7,9 +7,11 @@ console.log("Enter ID");
 
 rl.on('line', function (line) {
   let bits = line.split("i want product ");
-  let id = bits[1];
-  if (id !== '') {
+  if (bits[1]) {
+    let id = bits[1];
     orderProductById(id);
+  } else {
+    process.exit();
   }
 })
 
