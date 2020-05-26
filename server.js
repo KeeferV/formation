@@ -27,12 +27,7 @@ app.set("views", path.join(__dirname, "views"));
 //app.use
 
 app.get('/', (req, res) => {
-  getAllProducts((err, products) => {
-    if (err) {
-      throw err;
-    }
-    res.render("index", {products: products});
-  });
+  showProducts(res);
 })
 app.get('/about', (req, res) => res.send('About us'))
 app.get('/contact', (req, res) => res.send('Contact us!'))
@@ -55,3 +50,12 @@ function getAllProducts(callback) {
   })
 }
 
+function showProducts(res) {
+  getAllProducts((err, products) => {
+    if (err) {
+      throw err;
+    }
+    res.render("index", {products: products});
+  });
+
+}
