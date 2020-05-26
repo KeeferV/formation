@@ -87,17 +87,11 @@ function validateUser(req, res, next) {
   let email = req.body.email
   let password = req.body.password
 
-  Users.findOne({"email": email}, function (err, user) {
-    if (err) {
+  Users.findOne({"email": email, "password": password}, function (err, user) {
+    if (err || !user) {
       return res.sendStatus(403);
     }
-    if (!user) {
-      return res.sendStatus(403);
-    }
-    if (user.password !== password) {
-      return res.sendStatus(403);
-    }
-    next()
+    return next()
   })
 }
 
@@ -105,28 +99,7 @@ function userOrder(req, res) {
   let id = req.body.id
 
   return orderProductById(id, res)
-  /*
-  let email = req.body.email
-  let password = req.body.password
-
-  Users.findOne({"email": email}, function (err, user) {
-    if (err) {
-      console.log(err);
-      return res.sendStatus(500);
-    }
-    if (!user) {
-      return res.send("email not found")
-    }
-    if (user.password !== password) {
-      return res.send("Invalid password")
-    }
-    return orderProductById(id, res)
-
-  })
-  //return res.send(email);
-  */
 }
-
 
 function orderProductById(id, res) {
   Products.findByIdAndUpdate(id, {

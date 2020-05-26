@@ -4,9 +4,9 @@
   "description": "My book store",
   "main": "start.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node server.js",
     "test": "test",
-    "dev": "nodemon index.js"
+    "dev": "nodemon server.js"
   },
   "author": "Keith Vernon",
   "license": "ISC",
