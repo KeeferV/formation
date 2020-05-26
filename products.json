@@ -8,7 +8,7 @@
             "EUR_price": 5.5,
             "file_link": "https://kalmtec.com/A01",
             "creation_date": "2020-01-01",
-            "orders_counter": 24
+            "orders_counter": 25
         },
         {
             "id": "A02",
@@ -18,7 +18,7 @@
             "EUR_price": 1.75,
             "file_link": "https://kalmtec.com/A02",
             "creation_date": "2020-01-02",
-            "orders_counter": 2
+            "orders_counter": 9
         }
     ]
 }

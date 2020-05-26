@@ -16,6 +16,8 @@ const server = http.createServer(function (req, res) {
 */
 var fs = require('fs')
 var path = require('path')
+var mongoose = require('mongoose')
+var products = require('./models/products.js');
 
 const express = require('express')
 const app = express()
@@ -30,10 +32,12 @@ app.use(express.static("public"))
 app.get('/', (req, res) => {
   showProducts(res);
 })
+/*
 app.get('/order/:id', (req, res) => {
   let id = req.params.id;
   orderProductById(id, res)
 })
+*/
 app.get('/api/order/:id', (req, res) => {
   let id = req.params.id;
   orderProductById(id, res)
@@ -54,7 +58,7 @@ function orderProductById(id, res) {
     products.forEach(product => {
       if (product.id == id) {
         product.orders_counter++;
-        link = product.file_link;
+        link = product.name;
       }
     });
     let new_products = {"products": products}
@@ -63,7 +67,7 @@ function orderProductById(id, res) {
         console.log(err);
         return res.sendStatus(500);
       }
-      return res.json({response: {message: `Commande terminée! Voici votre fichier ${link}`}})
+      return res.json({response: {message: `Commande terminée!\n"${link}"`}})
       //return res.send()
     });
   })
