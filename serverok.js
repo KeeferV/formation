@@ -31,6 +31,7 @@ mongoose
     })
 
 var schemaProducts = new mongoose.Schema({
+  "id": "String",
   "name": "String",
   "description": "String",
   "USD_price": "Decimal128",
@@ -65,14 +66,13 @@ app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 
 function orderProductById(id, res) {
-  Products.findByIdAndUpdate(id, {
+  Products.findOneAndUpdate({"id": id}, {
     $inc: {"orders_counter": 1}
   }, function (err, product) {
     if (err) {
       console.log(err);
       return res.sendStatus(500);
     }
-    console.log(product.orders_counter)
     return res.json({response: {message: product.name}})
   })
 }
@@ -100,6 +100,7 @@ function showProducts(res) {
 
 function initSaveProducts() {
   let p = new Products;
+  p.id = "A02"
   p.name = "Pillars of the earth - Ken Follett"
   p.description = ""
   p.USD_price = 2

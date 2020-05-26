@@ -31,6 +31,7 @@ mongoose
     })
 
 var schemaProducts = new mongoose.Schema({
+  "id": "String",
   "name": "String",
   "description": "String",
   "USD_price": "Decimal128",
@@ -50,10 +51,17 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static("public"))
 
+//app.use
+
 app.get('/', (req, res) => {
   showProducts(res);
 })
-
+/*
+app.get('/order/:id', (req, res) => {
+  let id = req.params.id;
+  orderProductById(id, res)
+})
+*/
 app.get('/api/order/:id', (req, res) => {
   let id = req.params.id;
   orderProductById(id, res)
@@ -65,16 +73,40 @@ app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 
 function orderProductById(id, res) {
-  Products.findByIdAndUpdate(id, {
+  Products.findOneAndUpdate({"id": id}, {
     $inc: {"orders_counter": 1}
   }, function (err, product) {
     if (err) {
       console.log(err);
       return res.sendStatus(500);
     }
-    console.log(product.orders_counter)
     return res.json({response: {message: product.name}})
   })
+  /*
+  getAllProducts((err, products) => {
+    if (err) {
+      console.log(err);
+      return res.sendStatus(500);
+    }
+    var link;
+    products.forEach(product => {
+      if (product.id == id) {
+        product.orders_counter++;
+        link = product.name;
+      }
+    });
+    let new_products = {"products": products}
+
+    fs.writeFile(path.join(__dirname, "products.json"), JSON.stringify(new_products, null, 4), (err) => {
+      if (err) {
+        console.log(err);
+        return res.sendStatus(500);
+      }
+      return res.json({response: {message: `Commande terminée!\n"${link}"`}})
+      //return res.send()
+    });
+  })
+  */
 }
 
 
@@ -85,6 +117,20 @@ function getAllProducts(callback) {
     }
     return callback(null, list)
   })
+
+  /*
+  fs.readFile(path.join(__dirname, "products.json"), "utf8", (err, contents) => {
+    if (err) {
+      return callback(err)
+    }
+    try {
+      var products = JSON.parse(contents).products;
+      return callback(null, products)
+    } catch (error) {
+      return callback(error)
+    }
+  })
+  */
 }
 
 function showProducts(res) {
@@ -100,6 +146,7 @@ function showProducts(res) {
 
 function initSaveProducts() {
   let p = new Products;
+  p.id = "A02"
   p.name = "Pillars of the earth - Ken Follett"
   p.description = ""
   p.USD_price = 2

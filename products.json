@@ -1,24 +1,36 @@
 {
     "products": [
         {
+            "_id": "5ecd02d5aeb7c15556cbe436",
             "id": "A01",
             "name": "The book thief - Markus Zusak",
             "description": "",
-            "USD_price": 6.5,
-            "EUR_price": 5.5,
+            "USD_price": {
+                "$numberDecimal": "6.5"
+            },
+            "EUR_price": {
+                "$numberDecimal": "5.5"
+            },
             "file_link": "https://kalmtec.com/A01",
-            "creation_date": "2020-01-01",
-            "orders_counter": 25
+            "creation_date": "2020-01-01T00:00:00.000Z",
+            "orders_counter": 1,
+            "__v": 0
         },
         {
+            "_id": "5ecd030e5e79f35570bd4084",
             "id": "A02",
             "name": "Pillars of the earth - Ken Follett",
             "description": "",
-            "USD_price": 2,
-            "EUR_price": 1.75,
+            "USD_price": {
+                "$numberDecimal": "2"
+            },
+            "EUR_price": {
+                "$numberDecimal": "1.75"
+            },
             "file_link": "https://kalmtec.com/A02",
-            "creation_date": "2020-01-02",
-            "orders_counter": 9
+            "creation_date": "2020-01-02T00:00:00.000Z",
+            "orders_counter": 2,
+            "__v": 0
         }
     ]
 }

@@ -7,7 +7,7 @@
 <body>
 <ul>
   <% products.forEach(function(product){ %>
-  <li><a onclick="order('<%=product._id%>')" href="#" xhref="order/<%=product.id%>"><%=product.name%></a> - €<%=product.EUR_price%></li>
+  <li><%=product._id%><a onclick="order('<%=product.id%>')" href="#" xhref="order/<%=product.id%>"><%=product.name%></a> - €<%=product.EUR_price%></li>
   <% }); %>
 </ul>
 </body>
