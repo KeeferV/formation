@@ -2,6 +2,7 @@ var fs = require('fs')
 var path = require('path')
 var mongoose = require('mongoose')
 var products = require('./models/products.js');
+const bodyParser = require('body-parser');
 
 mongoose.connect('mongodb://localhost:27017/database', {
   "useNewUrlParser": true,
@@ -28,7 +29,13 @@ var schemaProducts = new mongoose.Schema({
   "creation_date": "Date",
   "orders_counter": "Number"
 });
+var schemaUsers = new mongoose.Schema({
+  "email": "String",
+  "password": "String"
+});
 var Products = mongoose.model('Products', schemaProducts)
+var Users = mongoose.model('Users', schemaUsers)
+//initSaveUsers()
 //initSaveProducts()
 
 const express = require('express')
@@ -38,10 +45,22 @@ const port = 3000
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static("public"))
+app.use(bodyParser.urlencoded({extended: true}));
+
 
 app.get('/', (req, res) => {
   showProducts(res);
 })
+
+app.get('/user/:id', (req, res) => {
+  let id = req.params.id;
+  showUser(id, res);
+})
+
+app.post('/order', (req, res) => {
+  return validateUser(req, res);
+})
+
 
 app.get('/api/order/:id', (req, res) => {
   let id = req.params.id;
@@ -52,6 +71,34 @@ app.get('/*', (req, res) => res.send('Other pages'))
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
+function showUser(id, res) {
+  return res.render("userForm", {id: id});
+}
+
+function validateUser(req, res) {
+  let id = req.body.id
+  let email = req.body.email
+  let password = req.body.password
+
+  Users.findOne({"email": email}, function (err, user) {
+    if (err) {
+      console.log(err);
+      return res.sendStatus(500);
+    }
+    if (!user) {
+      console.log("email not found")
+      return res.send("email not found")
+    }
+    if (user.password !== password) {
+      console.log("Invalid password")
+      return res.send("Invalid password")
+    }
+    return orderProductById(id, res)
+
+  })
+  //return res.send(email);
+}
+
 
 function orderProductById(id, res) {
   Products.findByIdAndUpdate(id, {
@@ -61,8 +108,8 @@ function orderProductById(id, res) {
       console.log(err);
       return res.sendStatus(500);
     }
-    console.log(product.orders_counter)
-    return res.json({response: {message: product.name}})
+    return res.send(`${product.name} ordered`)
+    //return res.json({response: {message: product.name}})
   })
 }
 
@@ -96,5 +143,12 @@ function initSaveProducts() {
   p.file_link = "https://kalmtec.com/A02"
   p.creation_date = "2020-01-02"
   p.orders_counter = 1
+  p.save();
+}
+
+function initSaveUsers() {
+  let p = new Users;
+  p.email = "keith.vernon@batiactugroupe.com"
+  p.password = "kv"
   p.save();
 }
