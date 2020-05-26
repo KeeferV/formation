@@ -32,8 +32,10 @@ app.get('/', (req, res) => {
 })
 app.get('/order/:id', (req, res) => {
   let id = req.params.id;
-  //res.write(id);
-  //return res.end();
+  orderProductById(id, res)
+})
+app.get('/api/order/:id', (req, res) => {
+  let id = req.params.id;
   orderProductById(id, res)
 })
 app.get('/contact', (req, res) => res.send('Contact us!'))
@@ -61,8 +63,8 @@ function orderProductById(id, res) {
         console.log(err);
         return res.sendStatus(500);
       }
-      res.write(`Commande terminée! Voici votre fichier ${link}`)
-      return res.end();
+      return res.json({response: {message: `Commande terminée! Voici votre fichier ${link}`}})
+      //return res.send()
     });
   })
 }

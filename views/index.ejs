@@ -1,11 +1,14 @@
 <html>
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="form.js"></script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <ul>
   <% products.forEach(function(product){ %>
-    <li><a href="order/<%=product.id%>"><%=product.name%></a></li>
+    <li><a onclick="order('<%=product.id%>')" href="#" xhref="order/<%=product.id%>"><%=product.name%></a></li>
   <% }); %>
 </ul>
 </body>
