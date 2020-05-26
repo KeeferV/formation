@@ -48,6 +48,14 @@ app.use(express.static("public"))
 app.use(bodyParser.urlencoded({extended: true}));
 
 
+app.use('/order', function (req, res, next) {
+  validateUser(req, res, next)
+}, function (req, res, next) {
+  //console.log('Request Type:', req.method)
+  next()
+})
+
+
 app.get('/', (req, res) => {
   showProducts(res);
 })
@@ -58,7 +66,7 @@ app.get('/user/:id', (req, res) => {
 })
 
 app.post('/order', (req, res) => {
-  return validateUser(req, res);
+  return userOrder(req, res);
 })
 
 
@@ -75,8 +83,29 @@ function showUser(id, res) {
   return res.render("userForm", {id: id});
 }
 
-function validateUser(req, res) {
+function validateUser(req, res, next) {
+  let email = req.body.email
+  let password = req.body.password
+
+  Users.findOne({"email": email}, function (err, user) {
+    if (err) {
+      return res.sendStatus(403);
+    }
+    if (!user) {
+      return res.sendStatus(403);
+    }
+    if (user.password !== password) {
+      return res.sendStatus(403);
+    }
+    next()
+  })
+}
+
+function userOrder(req, res) {
   let id = req.body.id
+
+  return orderProductById(id, res)
+  /*
   let email = req.body.email
   let password = req.body.password
 
@@ -86,17 +115,16 @@ function validateUser(req, res) {
       return res.sendStatus(500);
     }
     if (!user) {
-      console.log("email not found")
       return res.send("email not found")
     }
     if (user.password !== password) {
-      console.log("Invalid password")
       return res.send("Invalid password")
     }
     return orderProductById(id, res)
 
   })
   //return res.send(email);
+  */
 }
 
 
