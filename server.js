@@ -23,17 +23,49 @@ const port = 3000
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+app.use(express.static("public"))
 
 //app.use
 
 app.get('/', (req, res) => {
   showProducts(res);
 })
-app.get('/about', (req, res) => res.send('About us'))
+app.get('/order/:id', (req, res) => {
+  let id = req.params.id;
+  //res.write(id);
+  //return res.end();
+  orderProductById(id, res)
+})
 app.get('/contact', (req, res) => res.send('Contact us!'))
 app.get('/*', (req, res) => res.send('Other pages'))
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+
+
+function orderProductById(id, res) {
+  getAllProducts((err, products) => {
+    if (err) {
+      console.log(err);
+      return res.sendStatus(500);
+    }
+    var link;
+    products.forEach(product => {
+      if (product.id == id) {
+        product.orders_counter++;
+        link = product.file_link;
+      }
+    });
+    let new_products = {"products": products}
+    fs.writeFile(path.join(__dirname, "products.json"), JSON.stringify(new_products, null, 4), (err) => {
+      if (err) {
+        console.log(err);
+        return res.sendStatus(500);
+      }
+      res.write(`Commande terminée! Voici votre fichier ${link}`)
+      return res.end();
+    });
+  })
+}
 
 
 function getAllProducts(callback) {
@@ -53,9 +85,10 @@ function getAllProducts(callback) {
 function showProducts(res) {
   getAllProducts((err, products) => {
     if (err) {
-      throw err;
+      console.log(err);
+      return res.sendStatus(500)
     }
-    res.render("index", {products: products});
+    return res.render("index", {products: products});
   });
 
 }

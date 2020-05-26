@@ -1,5 +1,12 @@
+<html>
+<head>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 <ul>
   <% products.forEach(function(product){ %>
-    <%=product.id%>
+    <li><a href="order/<%=product.id%>"><%=product.name%></a></li>
   <% }); %>
 </ul>
+</body>
+</html>
