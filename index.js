@@ -19,14 +19,11 @@ rl.on('line', function (line) {
 
 function getAllProducts(callback) {
   fs.readFile(path.join(__dirname, "products.json"), "utf8", (err, contents) => {
-    if (err)
+    if (err) {
       return callback(err)
+    }
     try {
       var products = JSON.parse(contents).products;
-      //console.log("Bienvenue. Voici les produits disponibles")
-      //products.forEach(product => {
-      //  console.log(product.id, "-", product.name, "/", product.EUR_price / 100, "/", product.orders_counter)
-      //});
       return callback(null, products)
     } catch (error) {
       return callback(error)
@@ -36,6 +33,9 @@ function getAllProducts(callback) {
 
 function orderProductById(id) {
   getAllProducts((err, products) => {
+    if (err) {
+      throw err;
+    }
     var link;
     products.forEach(product => {
       if (product.id == id) {
