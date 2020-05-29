@@ -120,7 +120,7 @@ app.get('/login', (req, res) => {
 app.post('/login',
     passport.authenticate('local', {failureRedirect: '/login'}),
     function (req, res) {
-      res.redirect('/?username=' + req.body.email);
+      res.redirect('/' + req.body.email);
     }
 );
 
@@ -133,7 +133,7 @@ app.get('/order/:id',
 })
 
 app.get('/', (req, res) => {
-  showProducts(res);
+  showProducts(req, res);
 })
 
 app.get('/success', (req, res) => {
@@ -277,13 +277,14 @@ function getAllProducts(callback) {
   })
 }
 
-function showProducts(res) {
+function showProducts(req, res) {
   getAllProducts((err, products) => {
     if (err) {
       console.log(err);
       return res.sendStatus(500)
     }
-    return res.render("index", {products: products});
+    let user = (req.user) ? req.user : null
+    return res.render("index", {products: products, "user": user});
   });
 
 }

@@ -5,11 +5,17 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<ul>
+  <% if (user) { %>
+  <a href="getUserProducts">Show orders for this user</a>
+  <% } %>
+  <div>
+    <h3>All Products</h3>
+    <ul>
   <% products.forEach(function(product){ %>
   <!--<li><a onclick="order('<%=product._id%>')" href="#" xhref="order/<%=product.id%>"><%=product.name%></a> - €<%=product.EUR_price%></li>-->
-  <li><a href="order/<%=product.id%>"><%=product.name%></a> - €<%=product.EUR_price%> (ordered <%=product.orders_counter%> times)</li>
+  <li><a href="order/<%=product.id%>">Order</a> <%=product.name%> - €<%=product.EUR_price%> (ordered <%=product.orders_counter%> times)</li>
   <% }); %>
-</ul>
+  </ul>
+  </div>
 </body>
 </html>
