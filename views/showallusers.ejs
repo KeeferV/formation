@@ -6,9 +6,9 @@
 </head>
 <body>
 <ul>
-  <% products.forEach(function(product){ %>
+  <% users.forEach(function(user){ %>
   <!--<li><a onclick="order('<%=product._id%>')" href="#" xhref="order/<%=product.id%>"><%=product.name%></a> - €<%=product.EUR_price%></li>-->
-  <li><a href="order/<%=product.id%>"><%=product.name%></a> - €<%=product.EUR_price%> (ordered <%=product.orders_counter%> times)</li>
+  <li><%=user.email%> - <%=user.password%></li>
   <% }); %>
 </ul>
 </body>
