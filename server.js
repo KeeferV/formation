@@ -1,7 +1,10 @@
 var fs = require('fs')
 var path = require('path')
+var helmet = require('helmet'); // security
 var mongoose = require('mongoose')
+var restify = require('express-restify-mongoose')
 var passport = require('passport')
+var bcrypt = require('bcrypt')
 var LocalStrategy = require('passport-local').Strategy;
 const session = require('express-session');
 
@@ -49,6 +52,17 @@ var Orders = mongoose.model('Orders', schemaOrders)
 //initSaveUsers()
 //initSaveProducts()
 
+/*
+schemaUsers.methods.generateHash = function (password) {
+  return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+};
+
+// checking if password is valid
+schemaUsers.methods.validPassword = function (password) {
+  return bcrypt.compareSync(password, this.password);
+};
+*/
+
 
 const express = require('express')
 const app = express()
@@ -56,8 +70,12 @@ const port = 3000
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+
+app.use(helmet());
+
 app.use(express.static("public"))
 app.use(bodyParser.urlencoded({extended: true}));
+//app.use(methodOverride())
 app.use(session({
   secret: 'Insert randomized text here',
   resave: false,
@@ -90,10 +108,21 @@ passport.use(new LocalStrategy(
           return done(null, false);
         }
 
-        if (user.password != password) {
-          return done(null, false);
-        }
-        return done(null, user);
+        bcrypt.compare(password, user.password, function (err, res) {
+          if (err) {
+            return done(err)
+          }
+          if (res === false) {
+            return done(null, false)
+          } else {
+            return done(null, user)
+          }
+        })
+
+        //if (user.password != password) {
+        //  return done(null, false);
+        //}
+        //return done(null, user);
       });
     }
 ));
@@ -110,6 +139,12 @@ app.use('/', function (req, res, next) {
   //console.log(`User :  ${req.user}`)
   next();
 });
+
+
+restify.serve(app, Users)
+restify.serve(app, Products)
+restify.serve(app, Orders)
+
 
 
 app.get('/login', (req, res) => {
@@ -200,7 +235,7 @@ async function getUserProducts(req, res) {
       let product = await getProduct(order.product)
       list.push({"product": product, "order": order})
     }
-    console.log(req.user)
+    //console.log(req.user)
     return res.render("userproducts", {"list": list, "user": req.user})
   } catch (e) {
     return res.send("ERROR")
@@ -342,7 +377,7 @@ function initSaveProducts() {
 
 function initSaveUsers() {
   let p = new Users;
-  p.email = "keith.vernon@batiactugroupe.com"
-  p.password = "kv"
+  p.email = "kvernon@kalmtec.com"
+  p.password = bcrypt.hashSync("kv", bcrypt.genSaltSync(8), null);
   p.save();
 }

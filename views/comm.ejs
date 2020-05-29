@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+  <head>
+    <script src='http://code.jquery.com/jquery-1.7.2.min.js'></script>
+    <script src='http://kv:3000/socket.io/socket.io.js'></script>
+    <script>
+      var socket = io.connect('http://localhost:3000');
+
+      socket.on('welcome', function (data) {
+        $('#messages').append('<li>' + data.message + '</li>');
+        socket.emit('clientresponse', {data: 'foo!'});
+      });
+      socket.on('error', function () {
+        let err = "Error";
+        $('#errors').append('<li>' + err + '</li>');
+        console.error(arguments)
+      });
+      socket.on('message', function (data) {
+          $('#messages').append('<li>' + data.message + '</li>');
+          //console.log(arguments)
+      });
+      function send() {
+        socket.emit('message', {data: $("textarea").val()});
+        $("textarea").val("")
+        $("textarea").focus()
+      }
+    </script>
+  </head>
+  <body>
+    <h3>Msg from Server</h3>
+    <ul id='messages'></ul>
+    <textarea></textarea>
+    <button onclick="send()">Send</button>
+    <ul id="errors"></ul>
+  </body>
+</html>
